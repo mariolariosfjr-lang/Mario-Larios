@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mario Larios Website</title>
+<style>
+    body { font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; text-align:center;}
+    h1 { color: #16643d; }
+    button, .call-button { margin:10px; padding:12px 20px; border:none; border-radius:6px; cursor:pointer; font-size:16px; }
+    .call-button { background-color:#16643d; color:#fff; text-decoration:none; display:inline-block;}
+    .call-button:hover { background-color:#11432a; }
+    .feature { background-color:#fff; padding:20px; margin:20px auto; border-radius:10px; max-width:400px; box-shadow:0 0 10px rgba(0,0,0,0.1);}
+    input { padding:10px; width:80%; margin:5px 0; border-radius:5px; border:1px solid #ccc; }
+</style>
+</head>
+<body>
+
+<h1>Welcome to Mario Larios Website</h1>
+
+<div class="feature">
+    <h2>Call Us</h2>
+    <a href="tel:5205611252" class="call-button">Call 520-561-1252</a>
+    <a href="tel:5206539935" class="call-button">Call 520-653-9935</a>
+</div>
+
+<div class="feature">
+    <h2>Sign Up / Sign In</h2>
+    <input type="text" id="username" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="signUp()">Sign Up</button>
+    <button onclick="signIn()">Sign In</button>
+    <p id="loginStatus"></p>
+</div>
+
+<div class="feature">
+    <h2>Report Abuse</h2>
+    <textarea id="reportText" rows="4" cols="30" placeholder="Describe the issue..."></textarea><br>
+    <button onclick="reportAbuse()">Submit Report</button>
+    <p id="reportStatus"></p>
+</div>
+
+<div class="feature">
+    <h2>Games</h2>
+    <button onclick="playGame()">Play a Game</button>
+    <p id="gameStatus"></p>
+</div>
+
+<script>
+let users = {}; // simple in-memory users database
+let loggedInUser = null;
+
+function signUp() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    if(username && password) {
+        if(users[username]) {
+            document.getElementById('loginStatus').innerText = "Username already exists!";
+        } else {
+            users[username] = password;
+            document.getElementById('loginStatus').innerText = "Sign Up successful! You can now sign in.";
+        }
+    } else {
+        document.getElementById('loginStatus').innerText = "Please enter username and password.";
+    }
+}
+
+function signIn() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    if(users[username] && users[username] === password) {
+        loggedInUser = username;
+        document.getElementById('loginStatus').innerText = "Signed in as " + username;
+    } else {
+        document.getElementById('loginStatus').innerText = "Incorrect username or password.";
+    }
+}
+
+function reportAbuse() {
+    if(!loggedInUser) {
+        document.getElementById('reportStatus').innerText = "Please sign in to submit a report.";
+        return;
+    }
+    const reportText = document.getElementById('reportText').value;
+    if(reportText) {
+        document.getElementById('reportStatus').innerText = "Report submitted. Thank you, " + loggedInUser + "!";
+        document.getElementById('reportText').value = "";
+    } else {
+        document.getElementById('reportStatus').innerText = "Please write something before submitting.";
+    }
+}
+
+function playGame() {
+    if(!loggedInUser) {
+        document.getElementById('gameStatus').innerText = "Please sign in to play games.";
+        return;
+    }
+    const outcomes = ["You won!", "Try again!", "Game over!", "Awesome!", "Nice move!"];
+    document.getElementById('gameStatus').innerText = outcomes[Math.floor(Math.random()*outcomes.length)];
+}
+</script>
+
+</body>
+</html>
